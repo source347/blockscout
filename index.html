@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blockscout Multi-Chain Explorer: The Best EVM Block Explorer for Ethereum, Base, and Arbitrum</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Load Phosphor Icons for simple, modern iconography -->
+    <script src="https://unpkg.com/phosphor-icons"></script>
+    <style>
+        /* Variables */
+        :root {
+            --bg-dark: #121212;
+            --card-dark: #1e1e1e;
+            --primary-accent: #65a30d; /* Blockscout Green/Yellow */
+            --secondary-accent: #0f766e; /* Teal */
+            --text-light: #e5e7eb;
+            --text-muted: #9ca3af;
+        }
+
+        /* Global Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.7;
+            text-align: center;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Typography */
+        h1, h2, h3 {
+            color: var(--text-light);
+            font-weight: 700;
+            margin-top: 0;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-top: 40px;
+            margin-bottom: 10px;
+        }
+        h2 {
+            font-size: 1.75rem;
+            margin-top: 50px;
+            border-bottom: 2px solid var(--card-dark);
+            padding-bottom: 10px;
+        }
+        p {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 60px 20px;
+            background: linear-gradient(145deg, var(--card-dark) 0%, #171717 100%);
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            margin-bottom: 40px;
+        }
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--primary-accent);
+            font-weight: 600;
+        }
+
+        /* Search Bar (Interactive Placeholder) */
+        .search-container {
+            margin: 30px auto;
+            max-width: 650px;
+            display: flex;
+            background-color: var(--bg-dark);
+            border-radius: 10px;
+            border: 2px solid var(--secondary-accent);
+            overflow: hidden;
+        }
+        #searchInput {
+            flex-grow: 1;
+            padding: 15px 20px;
+            border: none;
+            background: transparent;
+            color: var(--text-light);
+            font-size: 16px;
+            outline: none;
+        }
+        .search-btn {
+            background-color: var(--secondary-accent);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .search-btn:hover {
+            background-color: #0d6860;
+        }
+
+        /* Referral Box (CTA) */
+        .cta-box {
+            background-color: var(--card-dark);
+            border: 1px solid var(--primary-accent);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .cta-box h3 {
+            color: var(--primary-accent);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        .referral-link {
+            background-color: #2e2e2e;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 15px;
+            border: 1px dashed var(--primary-accent);
+            user-select: all;
+            word-break: break-all;
+        }
+        .copy-btn {
+            background-color: var(--primary-accent);
+            color: var(--bg-dark);
+            padding: 10px 25px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .copy-btn:hover {
+            background-color: #79c51a;
+            transform: translateY(-1px);
+        }
+        #copyMessage {
+            margin-top: 10px;
+            color: var(--primary-accent);
+            font-weight: 600;
+            opacity: 0;
+            height: 20px;
+            transition: opacity 0.3s;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            text-align: left;
+        }
+        .feature-card {
+            background-color: var(--card-dark);
+            padding: 25px;
+            border-radius: 10px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #333;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(101, 163, 13, 0.15);
+        }
+        .feature-card i {
+            font-size: 2rem;
+            color: var(--secondary-accent);
+            margin-bottom: 15px;
+            display: block;
+        }
+        .feature-card h3 {
+            margin-top: 0;
+            font-size: 1.25rem;
+            color: var(--primary-accent);
+        }
+        
+        /* Chain List */
+        .chain-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            list-style: none;
+            padding: 0;
+        }
+        .chain-list li {
+            background-color: #272727;
+            padding: 10px 15px;
+            border-radius: 6px;
+            color: var(--text-light);
+            font-weight: 500;
+            transition: background-color 0.2s;
+            cursor: default;
+        }
+        .chain-list li:hover {
+            background-color: var(--secondary-accent);
+            color: white;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 60px;
+            padding: 30px 0;
+            border-top: 1px solid #333;
+            font-size: 0.85rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.5rem; }
+            .hero { padding: 40px 15px; }
+            .features-grid { grid-template-columns: 1fr; }
+            .chain-list { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <header class="hero">
+            <p class="subtitle">Blockchain Exploration Reimagined</p>
+            <!-- SEO Headline -->
+            <h1>Blockscout: The Ultimate **Multichain Block Explorer** for All EVM Networks</h1>
+            
+            <p style="max-width: 700px; margin: 20px auto 30px; font-size: 1.15rem;">
+                Tired of switching tabs? Blockscout is the **open-source** tool built for a multichain future, giving you deep insights into **Ethereum, Arbitrum, Base**, and over 1000 other EVM-compatible chains.
+            </p>
+
+            <!-- Interactive Search Bar -->
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search by address, TX hash, or ENS across multiple chains..." />
+                <button class="search-btn" onclick="performSearch()">
+                    <i class="ph-magnifying-glass-bold"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- CTA BOX WITH REFERRAL LINK -->
+        <div class="cta-box">
+            <h3>Start Your Seamless Web3 Journey Today</h3>
+            <p style="margin-bottom: 10px;">Click the link to get started or copy the specific referral code below:</p>
+            <a href="https://eth.blockscout.com?ref=6RZXK3" class="referral-link" style="text-decoration: none;">
+                https://eth.blockscout.com?ref=6RZXK3
+            </a>
+            <button class="copy-btn" onclick="copyCode('6RZXK3')">
+                Copy Referral Code: 6RZXK3
+            </button>
+            <div id="copyMessage"></div>
+        </div>
+        
+        <!-- --- -->
+        <h2>The Power of a Multichain Explorer</h2>
+        <!-- --- -->
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="ph-arrows-left-right-bold"></i>
+                <h3>Simplified Cross-Chain Search</h3>
+                <p>Blockscout is the true **multichain block explorer**. Search for an address or transaction hash and get results simultaneously across major networks like **Ethereum** (eth block explorer), **Arbitrum**, **Base**, Gnosis, and more. Stop guessing which chain your asset is on.</p>
+            </div>
+            <div class="feature-card">
+                <i class="ph-scroll-bold"></i>
+                <h3>Complete Smart Contract Coverage</h3>
+                <p>Go beyond basic transaction data. Blockscout provides advanced tools for **smart contract verification**, optimized APIs, and easy-to-use interfaces for reading, writing, and interacting with contracts and proxies. Essential for developers and power users.</p>
+            </div>
+            <div class="feature-card">
+                <i class="ph-currency-eth-bold"></i>
+                <h3>Deep Transaction Review</h3>
+                <p>Inspect and verify complex transactions with **rich metadata**. Blockscout uses human-readable extensions to make token transfers, internal transactions, and complex DeFi interactions easy to decipher and understand.</p>
+            </div>
+            <div class="feature-card">
+                <i class="ph-chart-bar-bold"></i>
+                <h3>Real-Time Network Statistics</h3>
+                <p>Stay informed with granular network trends, including real-time gas fees (ETH gas tracker), overall stats, and comprehensive data on block finality and network congestion. Make informed onchain decisions.</p>
+            </div>
+        </div>
+        
+        <!-- --- -->
+        <h2>EVM Block Explorer, Built for Developers</h2>
+        <!-- --- -->
+
+        <p style="font-size: 1.1rem; max-width: 800px; margin: 0 auto 30px;">
+            Blockscout isn't just for looking up transactions—it's a full-stack tool. Access advanced analytics, REST and JSON RPC APIs, tagging, debuggers, and various contract verification options through the comprehensive **Devportal**.
+        </p>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="ph-wallet-bold"></i>
+                <h3>Watchlist & Tagging</h3>
+                <p>Tag and track addresses of interest to gain immediate insights and receive notifications on key movements. Great for tracking whales, competitors, or protocol treasuries.</p>
+            </div>
+            <div class="feature-card">
+                <i class="ph-aperture-bold"></i>
+                <h3>Integrated DApp Directory</h3>
+                <p>Quickly identify and access decentralized applications (dApps) running on your network of choice. Filter by categories like Wallets, Liquid Staking, Bridges, Yield Aggregators, and NFTs.</p>
+            </div>
+        </div>
+
+        <!-- --- -->
+        <h2>Over 1000 Supported Blockchain Networks</h2>
+        <!-- --- -->
+        
+        <p style="max-width: 800px; margin: 0 auto 30px;">
+            Blockscout is open-source and adaptable, supporting all major types of **EVM based chains**, including Optimistic Rollups, ZK Rollups, and Layer 1s.
+        </p>
+
+        <ul class="chain-list">
+            <li>Ethereum Sepolia</li>
+            <li>OP Mainnet</li>
+            <li>**Arbitrum One Nitro**</li>
+            <li>**Base** (base block explorer)</li>
+            <li>Gnosis</li>
+            <li>Polygon PoS</li>
+            <li>zkSync Era</li>
+            <li>Scroll</li>
+            <li>ZetaChain</li>
+            <li>Mode</li>
+            <li>Rootstock</li>
+            <li>Celo</li>
+            <li>XRPL EVM Mainnet</li>
+            <li>Zora</li>
+        </ul>
+        
+        <div class="footer">
+            <p>Made with <i class="ph-heart-fill" style="color: #dc2626;"></i> by the Community. Blockscout is a fully open-source project.</p>
+            <p>&copy; 2025 Blockscout Guide. Your reference: 6RZXK3</p>
+        </div>
+
+    </div>
+
+    <!-- JavaScript for Copy-to-Clipboard Functionality and Search -->
+    <script>
+        // Copy-to-Clipboard Function
+        function copyCode(code) {
+            const messageElement = document.getElementById('copyMessage');
+            
+            // Use document.execCommand('copy') for better compatibility
+            const tempInput = document.createElement('input');
+            tempInput.value = code;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            
+            try {
+                document.execCommand('copy');
+                messageElement.textContent = "Code " + code + " Copied!";
+                messageElement.style.opacity = 1;
+                setTimeout(() => {
+                    messageElement.style.opacity = 0;
+                }, 2000);
+            } catch (err) {
+                console.error('Could not copy text: ', err);
+                messageElement.textContent = "Copy failed. Please copy manually.";
+                messageElement.style.opacity = 1;
+            } finally {
+                document.body.removeChild(tempInput);
+            }
+        }
+        
+        // Search Function (Directs user to the main Blockscout site with query)
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (query) {
+                // Directs search to Blockscout's main Ethereum explorer for simplicity
+                const baseUrl = "https://eth.blockscout.com/search?q=";
+                window.open(baseUrl + encodeURIComponent(query), '_blank');
+            }
+        }
+        
+        // Allows search with Enter key
+        document.getElementById('searchInput').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                performSearch();
+            }
+        });
+    </script>
+
+</body>
+</html>
